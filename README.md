@@ -302,9 +302,17 @@ dbind is a functional reactive data binding package that provides straightforwar
 ```javascript
 require(['dbind/bind'], function(bind){
     bind(anInputElement).to(myObject, "propertyName");
+    //see output realtime:
+    bind(myDiv).to(myObject, 'propertyName');
 });
 ```
-
+For dijits:
+```javascript
+require(['dijit/form/TextBox', 'dbind/bind'], function(TextBox){
+    var textBox = new TextBox({}, 'textbox');
+    bind(textBox).to(myProperty);
+});
+```
 [`dojo/Stateful`](http://dojotoolkit.org/reference-guide/1.9/dojo/Stateful.html)
 ---
 Base class for objects that provide named properties with optional getter/setter control and the ability to watch for property changes.
