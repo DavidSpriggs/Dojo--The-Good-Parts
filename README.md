@@ -298,7 +298,7 @@ this.dgrid.set("store", this.deviceStore);
 
 [`dbind`](https://github.com/kriszyp/dbind)
 -------
-Binding objects together.
+dbind is a functional reactive data binding package that provides straightforward binding of data to components like form inputs, validation connectors, and more. The dbind framework is designed to help you create organized, well-structured, layered applications, facilitating a clean separation between a data model with validation logic and presentation elements. It is also intended to be compatible with Dojo and bindr, giving you the full capabilities of the bindr reactive data binding language with Dojo and Dijit widgets.
 
 [`dojo/Stateful`](http://dojotoolkit.org/reference-guide/1.9/dojo/Stateful.html)
 ---
