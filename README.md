@@ -150,8 +150,52 @@ function(Deferred, dom, on){
 [`dojo/promise/all`](http://dojotoolkit.org/reference-guide/1.9/dojo/promise/all.html)
 ------------------
 A function that takes multiple promises and returns a new promise that is fulfilled when all promises have been fulfilled.
-- Use array or object
+```javascript
+// inside of a calss member function:
+//query to get geometries of all zips from map service
+var zipArray = [63385, 63301, 6387];
+var queryTaskPoints = new QueryTask(url_1);
+var queryTaskPolys = new QueryTask(url_2);
 
+var zipWhereClause = "ZIP IN (" + ZipArray.join(",") + ")";
+
+var query1 = new Query();
+query1.where = zipWhereClause;
+query1.outFields = ['*'];
+query1.maxAllowableOffset = 1000;
+query1.returnGeometry = true;
+query1.outSpatialReference = this.map.spatialReference;
+
+var query2 = new Query();
+query2.where = zipWhereClause;
+query2.outFields = ['*'];
+query2.maxAllowableOffset = 1000;
+query2.returnGeometry = true;
+query2.outSpatialReference = this.map.spatialReference;
+
+all([queryTaskPoints.execute(query1), queryTaskPolys.execute(query2)]).then(lang.hitch(this, 'viewZipsOnComplete'), lang.hitch(this, 'viewZipsOnError'));
+// class member function 'viewZipsOnComplete' will recive array of results.
+```
+##### Notes:
+Use an array or object:
+```javascript
+require(["dojo/promise/all"], function(all){
+
+  all([promise1, promise2]).then(function(results){
+    // results will be an Array
+  });
+
+  // -- or --
+
+  all({
+    promise1: promise1,
+    promise2: promise2
+  }).then(function(results){
+    // results will be an Object using the keys "promise1" and "promise2"
+  });
+
+});
+```
 [`dojo/store/Memory`](http://dojotoolkit.org/reference-guide/1.9/dojo/store/Memory.html)
 -------------------
 An object store wrapper for JSON available directly with an array of objects.
