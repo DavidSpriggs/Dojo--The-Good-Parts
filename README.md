@@ -112,8 +112,40 @@ some() semantically answers the question “does a test hold true for at least o
 
 [`dojo/Defered`](http://dojotoolkit.org/reference-guide/1.9/dojo/Deferred.html)
 --------------
-Manages the communication between asynchronous threads (callbacks).
-- Do not return the deffered, only the promise property.
+Manages the communication between asynchronous threads (callbacks). The deferred is the private interface that should not be returned to calling code. That's what the promise is for. See `dojo/promise/Promise`.
+
+This example provides a basic usage of Deferred, where we are creating an async process via the setTimeout function. This could also be an async query to the server (ajax).
+```javascript
+require(["dojo/Deferred", "dojo/dom", "dojo/on", "dojo/domReady!"],
+function(Deferred, dom, on){
+  function asyncProcess(){
+    var deferred = new Deferred();
+
+    dom.byId("output").innerHTML = "I'm running...";
+
+    setTimeout(function(){
+      deferred.resolve("success");
+    }, 1000);
+
+    return deferred.promise;
+  }
+
+  on(dom.byId("startButton"), "click", function(){
+    var process = asyncProcess();
+    process.then(function(results){
+      dom.byId("output").innerHTML = "I'm finished, and the result was: " + results;
+    });
+  });
+  
+});
+```
+```html
+<h1>Output:</h1>
+<div id="output">Not yet started.</div>
+<button type="button" id="startButton">Start</button>
+```
+##### Notes:
+- Do not return the deffered, only the promise: `return deferred.promise;`
 
 [`dojo/promise/all`](http://dojotoolkit.org/reference-guide/1.9/dojo/promise/all.html)
 ------------------
