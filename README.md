@@ -151,7 +151,7 @@ function(Deferred, dom, on){
 ------------------
 A function that takes multiple promises and returns a new promise that is fulfilled when all promises have been fulfilled.
 ```javascript
-// inside of a calss member function:
+// inside of a calss member function: ('dojo/promise/all', 'esri/tasks/query', 'esri/tasks/QueryTask' are required)
 //query to get geometries of all zips from map service
 var zipArray = [63385, 63301, 6387];
 var queryTaskPoints = new QueryTask(url_1);
@@ -198,17 +198,105 @@ require(["dojo/promise/all"], function(all){
 ```
 [`dojo/store/Memory`](http://dojotoolkit.org/reference-guide/1.9/dojo/store/Memory.html)
 -------------------
-An object store wrapper for JSON available directly with an array of objects.
+Memory is an object store wrapper for JavaScript/JSON available directly with an array. This store implements the new Dojo Object Store API.
+```javascript
+require(["dojo/store/Memory"], function(Memory){
+    var someData = [
+        {id:1, name:"One"},
+        {id:2, name:"Two"}
+    ];
+    store = new Memory({data: someData});
+
+    store.get(1) -> Returns the object with an id of 1
+
+    store.query({name:"One"}) // Returns query results from the array that match the given query
+
+    store.query(function(object){
+        return object.id > 1;
+    }) // Pass a function to do more complex querying
+
+    store.query({name:"One"}, {sort: [{attribute: "id"}]}) // Returns query results and sort by id
+
+    store.put({id:3, name:"Three"}); // store the object with the given identity
+
+    store.remove(3); // delete the object
+});
+```
 
 [`dojo/store/Observable`](http://dojotoolkit.org/reference-guide/1.9/dojo/store/Observable.html)
 -----------------------
-An object store wrapper that adds support for notification of data changes to query result sets.
+An object store wrapper that adds support for notification of data changes to query result sets. The query result sets returned from a Observable store will include a observe function that can be used to monitor for changes.
+```javascript
+require(["dojo/store/Observable", "dojo/store/Memory"], function(Observable, Memory){
+    // create the initial Observable store
+    store = new Observable(new Memory({data: someData}));
+
+    // query the store
+    var results = store.query({rating:5});
+
+    // do something with the initial result set
+    results.forEach(insertRow);
+
+    // now listen for any changes
+    var observeHandle = results.observe(function(object, removedFrom, insertedInto){
+    if(removedFrom > -1){ // existing object removed
+        removeRow(removedFrom);
+    }
+    if(insertedInto > -1){ // new or updated object inserted
+        insertRow(insertedInto, object);
+    }
+    });
+
+    // this will trigger an addition to the result set (the observe listener will be called)
+    store.put({rating: 5, id: 3});
+
+    // this will *not* trigger a observe event, since the object does not match the query constraint (query was for rating = 5)
+    store.put({rating: 3, id: 4});
+
+    // if this object was in the result set, it will trigger a observe event
+    store.remove(2);
+
+    // done observing, any further modifications will not trigger our listener
+    observeHandle.cancel();
+});
+```
 
 [`dgrid`](http://dojofoundation.org/packages/dgrid/)
 -------
-Extensable grids.
+Extensable ui data grids. Too much to cover here, see this link to get [started](http://dojofoundation.org/packages/dgrid/tutorials/hello_dgrid/).
+```javascript
+this.dgrid = new(declare([Grid]))({
+	//selectionMode: "single",
+	bufferRows: Infinity,
+	columns: [{
+		label: "Type",
+		field: "type",
+		sortable: true
+	}, {
+		label: "Truck",
+		field: "label",
+		sortable: true
+	}, {
+		label: "Last Report",
+		field: "date",
+		sortable: true,
+		formatter: function(value) {
+			return new Date(value).toLocaleString();
+		}
+	}]
+}, 'truckGrid');
+this.dgrid.startup();
 
-[`dbibd`](https://github.com/kriszyp/dbind)
+var trucks = array.map(this.lastKnown.graphics, function(g) {
+	return g.attributes;
+});
+this.deviceStore = new Memory({
+	data: trucks
+});
+this.dgrid.set("store", this.deviceStore);
+```
+
+[`dbind`](https://github.com/kriszyp/dbind)
 -------
 Binding objects together.
 
