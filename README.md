@@ -9,7 +9,7 @@ Dojo, dijit, dojox, util, there are a lot of parts in the Dojo Toolkit. The aim 
 [`dojo/_base/lang`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/lang.html)
 -----------------
 Lang is a commonly used class and contains JS language enhancements, functions for supporting Polymorphism and other language constructs that are fundemental to the rest of the toolkit.
-#### lang.clone()
+##### `lang.clone()`
 Clones objects and/or nodes, returning a new anything, versus a reference. Pass something to clone(), and a new version of that something will be made:
 ```javascript
 require(["dojo/_base/lang"], function(lang){
@@ -20,7 +20,7 @@ require(["dojo/_base/lang"], function(lang){
   var newarray = lang.clone(["a", "b", "c"]);
 });
 ```
-#### lang.mixin()
+##### `lang.mixin()`
 Mixin is a simple utility function for mixing objects together. Mixin combines two objects from right to left, overwriting the left-most object, and returning the newly mixed object for use. mixin() only works on objects
 ```javascript
 require(["dojo/_base/lang"], function(lang){
@@ -29,7 +29,7 @@ require(["dojo/_base/lang"], function(lang){
   console.log(a); // b: c, d: f, g: h
 });
 ```
-#### lang.hitch()
+##### `lang.hitch()`
 Hitch returns a function that will execute a given function in a given context. This function allows you to control how a function executes, particularly in asynchronous operations.
 
 Method name example. Will look for 'method' on 'this' and pass arguments:
@@ -62,7 +62,7 @@ require(["dojo/_base/lang"], function(lang){
   var func = lang.hitch(myObj, function(someArg){
     //this = myObj
     this.method(someArg);
-  };
+  });
 
   func("foo");
   //outputs: foo bar
@@ -71,6 +71,13 @@ require(["dojo/_base/lang"], function(lang){
 [`dojo/_base/array`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/array.html)
 -----------------
 Array functions.
+##### `array.every()`
+##### `array.filter()`
+##### `array.forEach()`
+##### `array.indexOf()`
+##### `array.lastIndexOf()`
+##### `array.map()`
+##### `array.some()`
 
 [`dojo/Defered`](http://dojotoolkit.org/reference-guide/1.9/dojo/Deferred.html)
 --------------
