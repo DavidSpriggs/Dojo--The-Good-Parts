@@ -70,14 +70,45 @@ require(["dojo/_base/lang"], function(lang){
 ```
 [`dojo/_base/array`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/array.html)
 -----------------
-Array functions.
+Array provides enhancements to native Array functions which may not be available. In Dojo 2.0, this module will likely be replaced with a shim to support functions on legacy browsers that don’t have these native capabilities. Array has a notable difference from the JavaScript 1.6’s Array methods in that it runs over sparse arrays, passing the “holes” in the sparse array to the callback function. JavaScript 1.6’s Array methods skips the holes in the sparse array.
 ##### `array.every()`
+every() semantically answers the question “does a test hold true for every item in the array?” Like forEach(), every() iterates over the items in an array. However, it short circuits and returns false as soon as it encounters an item for which the provided callback returns a falsey value. If the callback returns true for all items, every() returns true.
 ##### `array.filter()`
+filter() does at it implies, filter an array or array-like structure. filter() will return an array for values from unfilteredArray for which the callback returns a truthy value. The original array is not modified.
 ##### `array.forEach()`
+forEach() iterates over Arrays and NodeLists and provides ways to filter the results. Can also scope callback.
+```javascript
+require(["dojo/_base/array"], function(array){
+  var foo = {
+    myMethod: function(el){
+        console.log(el);
+    }
+  };
+
+  array.forEach(["a","b","c"],function(item){
+    this.myMethod(item);
+  }, foo);
+  //outputs: a b c
+});
+```
 ##### `array.indexOf()`
+indexof() determines the index of an element in an Array. It locates the first index of the provided value in the passed array. If the value is not found, -1 is returned.
 ##### `array.lastIndexOf()`
+lastIndexOf() determines the last index of an element in an array. It locates the last index of the provided value in the passed array. If the value is not found, -1 is returned.
 ##### `array.map()`
+map() iterates all the elements in an array, passing them to the callback function and then returning a new array with any of the modified results.
+```javascript
+// a query to a map service returns a featureSet, lets make an array of just one attribute:
+// featureSet looks something like this (condensed for example): {features:[{attributes:{ZIP:63385},geometry:{rings:[...]},{attributes:{ZIP:63301},geometry:{rings:[...]},{attributes:{ZIP:63867},geometry:{rings:[...]}]};
+zips = array.map(featureSet.features, function(zipPolys) {
+  return zipPolys.attributes.ZIP;
+});
+// zips = [63385, 63301, 63867]
+```
 ##### `array.some()`
+some() semantically answers the question “does a test hold true for at least one item in the array?” Like forEach(), some() iterates over the items in an array. However, it short circuits and returns true as soon as it encounters an item for which the provided callback returns a truthy value. If the callback doesn’t return true for any item, some() returns false.
+##### Note:
+`every, map, forEach, some, filter` each accept a third paramater of a 'this' object! This allows you to scope the annonmus callback function! See forEach() code example above.
 
 [`dojo/Defered`](http://dojotoolkit.org/reference-guide/1.9/dojo/Deferred.html)
 --------------
