@@ -339,3 +339,37 @@ DOM manipulation
 
 [`dojo/aspect`](http://dojotoolkit.org/reference-guide/1.9/dojo/aspect.html)
 ---
+
+[`dojo/_base/declare`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html)
+---
+Declare contains functions to define Dojo classes, which support standard Object Oriented concepts within Dojo. JavaScript uses prototype-based inheritance, not class-based inheritance (which is used by most programming languages). Dojo provides the ability to simulate class-based inheritance using declare.
+```javascript
+// in "my/Person.js"
+define(["dojo/_base/declare", "dojo/_base/lang"], function(declare, lang){
+  return declare(null, {
+    name: "Anonymous",
+    age: null,
+    residence: "Universe A",
+
+    constructor: function(kwArgs){
+      lang.mixin(this, kwArgs);
+    },
+
+    moveTo: function(residence){
+      this.residence = residence;
+    }
+  });
+});
+```
+```javascript
+// using the class elsewhere...
+require(["my/Person"], function(Person){
+  var anon  = new Person();
+  var alice = new Person({ name: "Alice", age: 42, residence: "Universe 1" });
+
+  console.log(anon.name, alice.name); // "Anonymous", "Alice"
+  console.log(anon.residence, alice.residence); // "Universe A", "Universe 1"
+  alice.moveTo("Universe 420");
+  console.log(alice.residence); // "Universe 420"
+});
+```
