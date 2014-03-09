@@ -333,9 +333,22 @@ When you want to present dates or times to the user, JavaScript only knows how t
 ---
 CSS selector, like $.()
 
-[`dojo/dom-create dojo/dom-class dojo/dom-style dojo/dom-construct`]()
+`dojo/dom-* (class, style, construct)`
 ---
-DOM manipulation
+DOM manipulation, abstracted.
+
+##### [`dojo/dom-class`](http://dojotoolkit.org/reference-guide/1.9/dojo/dom-class.html)
+Manipulate css class names on nodes.
+
+Methods: contains(), add(), remove(), replace(), toggle().
+```javascript
+require(["dojo/dom-class", "dojo/dom", "dojo/on"],
+function(domClass, dom, on){
+  on(dom.byId("button2"), "click", function(){
+    domClass.toggle("example2", "style2");
+  });
+});
+```
 
 [`dojo/aspect`](http://dojotoolkit.org/reference-guide/1.9/dojo/aspect.html)
 ---
