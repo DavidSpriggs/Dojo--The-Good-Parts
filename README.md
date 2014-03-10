@@ -374,7 +374,7 @@ require(["dojo/query", "dojo/NodeList-fx"], function(query, nodeListFx){
 });
 ```
 
-`dojo/dom-* (class, style, construct)`
+`dojo/dom-class, dojo/dom-style`
 ---
 DOM manipulation, abstracted.
 
@@ -390,7 +390,30 @@ function(domClass, dom, on){
   });
 });
 ```
+##### [`dojo/dom-style`](http://dojotoolkit.org/reference-guide/1.9/dojo/dom-style.html)
+Manipulate css styles on nodes.
 
+Methods: getComputedStyle(), get(), set().
+```javascript
+require(["dojo/dom-style"], function(domStyle){
+  domStyle.set("someNode", "width", "100px");
+});
+```
+Multiple styles can be done by using a hash as the name argument:
+```javascript
+require(["dojo/dom-style"], function(domStyle){
+  domStyle.set("someNode", {
+    width: "100px",
+    backgroundColor: "blue"
+  });
+});
+```
+To remove an inline style, set the value to an empty string(""):
+```javascript
+require(["dojo/dom-style"], function(domStyle){
+  domStyle.set("someNode", "display", "");
+});
+```
 [`dojo/aspect`](http://dojotoolkit.org/reference-guide/1.9/dojo/aspect.html)
 ---
 The dojo/aspect module provides aspect oriented programming facilities to attach additional functionality to existing methods.
