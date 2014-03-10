@@ -277,10 +277,52 @@ require(['dijit/form/TextBox', 'dbind/bind'], function(TextBox){
 [`dojo/Stateful`](http://dojotoolkit.org/reference-guide/1.9/dojo/Stateful.html)
 ---
 Base class for objects that provide named properties with optional getter/setter control and the ability to watch for property changes.
+```javascript
+require(["dojo/Stateful", "dojo/_base/declare"], function(Stateful, declare){
+  // Subclass dojo/Stateful:
+  var MyClass = declare([Stateful], {
+    foo: null,
+    _fooGetter: function(){
+      return this.foo;
+    },
+    _fooSetter: function(value){
+      this.foo = value;
+    }
+  });
+
+  // Create an instance and set some initial property values:
+  myObj = new MyClass({
+    foo: "baz"
+  });
+
+  // Watch changes on a property:
+  myObj.watch("foo", function(name, oldValue, value){
+    // Do something based on the change
+  });
+
+  // Get the value of a property:
+  myObj.get("foo");
+
+  // Set the value of a property:
+  myObj.set("foo", "bar");
+});
+```
 
 [`dojo/on`](http://dojotoolkit.org/reference-guide/1.9/dojo/on.html)
 ---
 A general-purpose event handler module for DOM nodes and other event emitting objects, providing normalized event listening and event dispatching functionality. This module is designed to be lightweight and fast, based on modern browsers’ event model.
+```javascript
+require(["dojo/on"], function(on){
+  on(target, "event", function(e){
+    // handle event
+  });
+
+  on.emit(target, "event", {
+    bubbles: true,
+    cancelable: true
+  });
+});
+```
 
 [`dojo/number`](http://dojotoolkit.org/reference-guide/1.9/dojo/number.html)
 --
