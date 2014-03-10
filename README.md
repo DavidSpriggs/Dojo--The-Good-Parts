@@ -222,45 +222,6 @@ require(["dojo/store/Memory"], function(Memory){
     store.remove(3); // delete the object
 });
 ```
-
-[`dojo/store/Observable`](http://dojotoolkit.org/reference-guide/1.9/dojo/store/Observable.html)
------------------------
-An object store wrapper that adds support for notification of data changes to query result sets. The query result sets returned from a Observable store will include a observe function that can be used to monitor for changes.
-```javascript
-require(["dojo/store/Observable", "dojo/store/Memory"], function(Observable, Memory){
-    // create the initial Observable store
-    store = new Observable(new Memory({data: someData}));
-
-    // query the store
-    var results = store.query({rating:5});
-
-    // do something with the initial result set
-    results.forEach(insertRow);
-
-    // now listen for any changes
-    var observeHandle = results.observe(function(object, removedFrom, insertedInto){
-    if(removedFrom > -1){ // existing object removed
-        removeRow(removedFrom);
-    }
-    if(insertedInto > -1){ // new or updated object inserted
-        insertRow(insertedInto, object);
-    }
-    });
-
-    // this will trigger an addition to the result set (the observe listener will be called)
-    store.put({rating: 5, id: 3});
-
-    // this will *not* trigger a observe event, since the object does not match the query constraint (query was for rating = 5)
-    store.put({rating: 3, id: 4});
-
-    // if this object was in the result set, it will trigger a observe event
-    store.remove(2);
-
-    // done observing, any further modifications will not trigger our listener
-    observeHandle.cancel();
-});
-```
-
 [`dgrid`](http://dojofoundation.org/packages/dgrid/)
 -------
 Extensable ui data grids. Too much to cover here, see this link to get [started](http://dojofoundation.org/packages/dgrid/tutorials/hello_dgrid/).
@@ -352,7 +313,49 @@ function(domClass, dom, on){
 
 [`dojo/aspect`](http://dojotoolkit.org/reference-guide/1.9/dojo/aspect.html)
 ---
+The dojo/aspect module provides aspect oriented programming facilities to attach additional functionality to existing methods.
 
+##### `after()`
+
+The module includes an after function that provides after advice to a method. The provided advising function will be called after the main method is called. The after function’s signature is:
+```javascript
+after(target, methodName, advisingFunction, receiveArguments);
+```
+
+##### `before()`
+The module also includes a before function that provides before advice to a method. The provided advising function will be called before the main method is called. The before function’s signature is:
+```javascript
+before(target, methodName, advisingFunction);
+```
+
+##### `around()`
+The module finally includes an around function that provides around advice to a method. The provided advising function will be called in place of the main method, and the advising function will be passed a chaining function that can be used to continue to call execution to the next advice or original method. The around function’s signature is:
+```javascript
+around(target, methodName, advisingFactory);
+```
+
+##### Example of after(): (in a class module)
+```javascript
+postCreate: function() {
+    this.printTask = new esri.tasks.PrintTask(this.printTaskURL);
+    aspect.after(this.printTask, '_createOperationalLayers', this.operationalLayersInspector, false);
+},
+operationalLayersInspector: function(opLayers) {
+    array.forEach(opLayers, function(layer) {
+        if (layer.id == "Measurement_graphicslayer") {
+            array.forEach(layer.featureCollection.layers, function(fcLayer) {
+                array.forEach(fcLayer.featureSet.features, function(feature) {
+                    delete feature.attributes;
+                    feature.symbol.font.family = "Courier";
+                    feature.symbol.font.variant = esri.symbol.Font.VARIANT_NORMAL;
+                    feature.symbol.font.size = "32pt";
+                });
+            });
+        }
+    });
+    return opLayers;
+},
+```
 [`dojo/_base/declare`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html)
 ---
 Declare contains functions to define Dojo classes, which support standard Object Oriented concepts within Dojo. JavaScript uses prototype-based inheritance, not class-based inheritance (which is used by most programming languages). Dojo provides the ability to simulate class-based inheritance using declare.
