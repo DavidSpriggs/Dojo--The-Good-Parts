@@ -323,6 +323,26 @@ require(["dojo/on"], function(on){
   });
 });
 ```
+[`dojo/Evented`](http://dojotoolkit.org/reference-guide/1.9/dojo/Evented.html)
+---
+dojo/Evented is a module that provides a class that can be used as a base class or mixin for JavaScript classes that emit their own events. dojo/Evented is designed to provide a class that allows a developer to emit events and provide an easy way to allow those events to be connected to by downstream users. It leverages the API concepts of :ref:dojo/on <dojo/on>. It should be noted though that this is for what is commonly referred to as “sythetic” events, which are different than DOM events, which dojo/on normalises.
+```javascript
+define(["dojo/Evented", "dojo/_base/declare"], function(Evented, declare){
+  var MyComponent = declare([Evented], {
+    startup: function(){
+      // once we are done with startup, fire the "ready" event
+      this.emit("ready", {});
+    }
+  });
+
+  component = new MyComponent();
+  component.on("ready", function(){
+    // this will be called when the "ready" event is emitted
+    // ...
+  });
+  component.startup();
+});
+```
 
 [`dojo/number`](http://dojotoolkit.org/reference-guide/1.9/dojo/number.html)
 --
