@@ -355,6 +355,24 @@ When you want to present dates or times to the user, JavaScript only knows how t
 [`dojo/query`](http://dojotoolkit.org/reference-guide/1.9/dojo/query.html)
 ---
 CSS selector, like $.()
+```javascript
+require(["dojo/query", "dojo/NodeList-dom"], function(query){
+  query("li").forEach(function(node){
+    node.innerHTML = "Something";
+  }).style("color", "red")
+    .style("fontSize", "12px");
+});
+```
+```javascript
+require(["dojo/query", "dojo/NodeList-fx"], function(query, nodeListFx){
+    query("li.evens").fadeOut({
+          duration:1000,
+          onEnd: function(){ ... },
+          // begin playing immediately, and return the nodeList for further iteration
+          auto:true
+        }).onclick(doSomething);
+});
+```
 
 `dojo/dom-* (class, style, construct)`
 ---
