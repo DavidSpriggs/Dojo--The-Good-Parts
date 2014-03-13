@@ -6,6 +6,48 @@ This repo is a companion to the ESRI Developer Summit [Presentation](http://weba
 
 Dojo, dijit, dojox, util, there are a lot of parts in the Dojo Toolkit. The aim of this repo is to highlight the good parts and patterns that make Dojo a powerhouse!
 
+[`dojo/_base/array`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/array.html)
+-----------------
+Array provides enhancements to native Array functions which may not be available. In Dojo 2.0, this module will likely be replaced with a shim to support functions on legacy browsers that don’t have these native capabilities. Array has a notable difference from the JavaScript 1.6’s Array methods in that it runs over sparse arrays, passing the “holes” in the sparse array to the callback function. JavaScript 1.6’s Array methods skips the holes in the sparse array.
+##### `array.every()`
+every() semantically answers the question “does a test hold true for every item in the array?” Like forEach(), every() iterates over the items in an array. However, it short circuits and returns false as soon as it encounters an item for which the provided callback returns a falsey value. If the callback returns true for all items, every() returns true.
+##### `array.filter()`
+filter() does at it implies, filter an array or array-like structure. filter() will return an array for values from unfilteredArray for which the callback returns a truthy value. The original array is not modified.
+##### `array.forEach()`
+forEach() iterates over Arrays and NodeLists and provides ways to filter the results. Can also scope callback.
+```javascript
+require(["dojo/_base/array"], function(array){
+  var foo = {
+    myMethod: function(el){
+        console.log(el);
+    }
+  };
+
+  array.forEach(["a","b","c"],function(item){
+    this.myMethod(item);
+  }, foo);
+  //outputs: a b c
+});
+```
+##### `array.indexOf()`
+indexof() determines the index of an element in an Array. It locates the first index of the provided value in the passed array. If the value is not found, -1 is returned.
+##### `array.lastIndexOf()`
+lastIndexOf() determines the last index of an element in an array. It locates the last index of the provided value in the passed array. If the value is not found, -1 is returned.
+##### `array.map()`
+map() iterates all the elements in an array, passing them to the callback function and then returning a new array with any of the modified results.
+```javascript
+// a query to a map service returns a featureSet, lets make an array of just one attribute:
+// featureSet looks something like this (condensed for example): {features:[{attributes:{ZIP:63385},geometry:{rings:[...]},{attributes:{ZIP:63301},geometry:{rings:[...]},{attributes:{ZIP:63867},geometry:{rings:[...]}]};
+zips = array.map(featureSet.features, function(zipPolys) {
+  return zipPolys.attributes.ZIP;
+});
+// zips = [63385, 63301, 63867]
+```
+##### `array.some()`
+some() semantically answers the question “does a test hold true for at least one item in the array?” Like forEach(), some() iterates over the items in an array. However, it short circuits and returns true as soon as it encounters an item for which the provided callback returns a truthy value. If the callback doesn’t return true for any item, some() returns false.
+##### Note:
+`every, map, forEach, some, filter` each accept a third paramater of a 'this' object! This allows you to scope the annonmus callback function! See forEach() code example above.
+
 [`dojo/_base/lang`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/lang.html)
 -----------------
 Lang is a commonly used class and contains JS language enhancements, functions for supporting Polymorphism and other language constructs that are fundemental to the rest of the toolkit.
@@ -68,47 +110,6 @@ require(["dojo/_base/lang"], function(lang){
   //outputs: foo bar
 });
 ```
-[`dojo/_base/array`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/array.html)
------------------
-Array provides enhancements to native Array functions which may not be available. In Dojo 2.0, this module will likely be replaced with a shim to support functions on legacy browsers that don’t have these native capabilities. Array has a notable difference from the JavaScript 1.6’s Array methods in that it runs over sparse arrays, passing the “holes” in the sparse array to the callback function. JavaScript 1.6’s Array methods skips the holes in the sparse array.
-##### `array.every()`
-every() semantically answers the question “does a test hold true for every item in the array?” Like forEach(), every() iterates over the items in an array. However, it short circuits and returns false as soon as it encounters an item for which the provided callback returns a falsey value. If the callback returns true for all items, every() returns true.
-##### `array.filter()`
-filter() does at it implies, filter an array or array-like structure. filter() will return an array for values from unfilteredArray for which the callback returns a truthy value. The original array is not modified.
-##### `array.forEach()`
-forEach() iterates over Arrays and NodeLists and provides ways to filter the results. Can also scope callback.
-```javascript
-require(["dojo/_base/array"], function(array){
-  var foo = {
-    myMethod: function(el){
-        console.log(el);
-    }
-  };
-
-  array.forEach(["a","b","c"],function(item){
-    this.myMethod(item);
-  }, foo);
-  //outputs: a b c
-});
-```
-##### `array.indexOf()`
-indexof() determines the index of an element in an Array. It locates the first index of the provided value in the passed array. If the value is not found, -1 is returned.
-##### `array.lastIndexOf()`
-lastIndexOf() determines the last index of an element in an array. It locates the last index of the provided value in the passed array. If the value is not found, -1 is returned.
-##### `array.map()`
-map() iterates all the elements in an array, passing them to the callback function and then returning a new array with any of the modified results.
-```javascript
-// a query to a map service returns a featureSet, lets make an array of just one attribute:
-// featureSet looks something like this (condensed for example): {features:[{attributes:{ZIP:63385},geometry:{rings:[...]},{attributes:{ZIP:63301},geometry:{rings:[...]},{attributes:{ZIP:63867},geometry:{rings:[...]}]};
-zips = array.map(featureSet.features, function(zipPolys) {
-  return zipPolys.attributes.ZIP;
-});
-// zips = [63385, 63301, 63867]
-```
-##### `array.some()`
-some() semantically answers the question “does a test hold true for at least one item in the array?” Like forEach(), some() iterates over the items in an array. However, it short circuits and returns true as soon as it encounters an item for which the provided callback returns a truthy value. If the callback doesn’t return true for any item, some() returns false.
-##### Note:
-`every, map, forEach, some, filter` each accept a third paramater of a 'this' object! This allows you to scope the annonmus callback function! See forEach() code example above.
 
 [`dojo/Defered`](http://dojotoolkit.org/reference-guide/1.9/dojo/Deferred.html)
 --------------
@@ -274,39 +275,6 @@ require(['dijit/form/TextBox', 'dbind/bind'], function(TextBox){
     bind(textBox).to(myProperty);
 });
 ```
-[`dojo/Stateful`](http://dojotoolkit.org/reference-guide/1.9/dojo/Stateful.html)
----
-Base class for objects that provide named properties with optional getter/setter control and the ability to watch for property changes.
-```javascript
-require(["dojo/Stateful", "dojo/_base/declare"], function(Stateful, declare){
-  // Subclass dojo/Stateful:
-  var MyClass = declare([Stateful], {
-    foo: null,
-    _fooGetter: function(){
-      return this.foo;
-    },
-    _fooSetter: function(value){
-      this.foo = value;
-    }
-  });
-
-  // Create an instance and set some initial property values:
-  myObj = new MyClass({
-    foo: "baz"
-  });
-
-  // Watch changes on a property:
-  myObj.watch("foo", function(name, oldValue, value){
-    // Do something based on the change
-  });
-
-  // Get the value of a property:
-  myObj.get("foo");
-
-  // Set the value of a property:
-  myObj.set("foo", "bar");
-});
-```
 
 [`dojo/on`](http://dojotoolkit.org/reference-guide/1.9/dojo/on.html)
 ---
@@ -321,56 +289,6 @@ require(["dojo/on"], function(on){
     bubbles: true,
     cancelable: true
   });
-});
-```
-[`dojo/Evented`](http://dojotoolkit.org/reference-guide/1.9/dojo/Evented.html)
----
-dojo/Evented is a module that provides a class that can be used as a base class or mixin for JavaScript classes that emit their own events. dojo/Evented is designed to provide a class that allows a developer to emit events and provide an easy way to allow those events to be connected to by downstream users. It leverages the API concepts of :ref:dojo/on <dojo/on>. It should be noted though that this is for what is commonly referred to as “sythetic” events, which are different than DOM events, which dojo/on normalises.
-```javascript
-define(["dojo/Evented", "dojo/_base/declare"], function(Evented, declare){
-  var MyComponent = declare([Evented], {
-    startup: function(){
-      // once we are done with startup, fire the "ready" event
-      this.emit("ready", {});
-    }
-  });
-
-  component = new MyComponent();
-  component.on("ready", function(){
-    // this will be called when the "ready" event is emitted
-    // ...
-  });
-  component.startup();
-});
-```
-
-[`dojo/number`](http://dojotoolkit.org/reference-guide/1.9/dojo/number.html)
---
-Contains methods for user presentation of JavaScript Number objects: formatting, parsing, and rounding. Formatting and parsing are done in a locale-sensitive manner, using culturally appropriate patterns for representing group (thousands) and decimal separators, percent signs, etc. This module forms the basis of dojo.currency, which uses similar methods but adds support for currency symbols and alters the pattern as appropriate.
-
-[`dojo/date/locale`](http://dojotoolkit.org/reference-guide/1.9/dojo/date/locale/format.html#dojo-date-locale-format)
----
-When you want to present dates or times to the user, JavaScript only knows how to handle a single locale and language, and the actual format is implementation-dependent, and your web application has no control over these choices. Dojo comes with a powerful library to format and parse dates and times using local language and conventions, from your choice of hundreds of locales, or as you would like using custom date/time patterns.
-
-[`dojo/query`](http://dojotoolkit.org/reference-guide/1.9/dojo/query.html)
----
-CSS selector, like $.()
-```javascript
-require(["dojo/query", "dojo/NodeList-dom"], function(query){
-  query("li").forEach(function(node){
-    node.innerHTML = "Something";
-  }).style("color", "red")
-    .style("fontSize", "12px");
-});
-```
-```javascript
-require(["dojo/query", "dojo/NodeList-fx"], function(query, nodeListFx){
-    query("li.evens").fadeOut({
-          duration:1000,
-          onEnd: function(){ ... },
-          // begin playing immediately, and return the nodeList for further iteration
-          auto:true
-        }).onclick(doSomething);
 });
 ```
 
@@ -414,6 +332,7 @@ require(["dojo/dom-style"], function(domStyle){
   domStyle.set("someNode", "display", "");
 });
 ```
+
 [`dojo/aspect`](http://dojotoolkit.org/reference-guide/1.9/dojo/aspect.html)
 ---
 The dojo/aspect module provides aspect oriented programming facilities to attach additional functionality to existing methods.
@@ -459,6 +378,22 @@ operationalLayersInspector: function(opLayers) {
     return opLayers;
 },
 ```
+
+[`dojo/topic`](http://dojotoolkit.org/reference-guide/1.9/dojo/topic.html)
+---
+dojo/topic provides a centralized hub (event bus) for publishing and subscribing to global messages by topic. Because topics are not bound to a particular object, they are useful for communication between multiple instances or various different types of objects.
+
+Topics can be subscribed to by using `topic.subscribe()`, and messages can publish by using `topic.publish()`.
+```javascript
+require(["dojo/topic"], function(topic){
+    topic.subscribe("some/topic", function(){
+        console.log("received:", arguments);
+    });
+    // ...
+    topic.publish("some/topic", "one", "two");
+});
+```
+
 [`dojo/_base/declare`](http://dojotoolkit.org/reference-guide/1.9/dojo/_base/declare.html)
 ---
 Declare contains functions to define Dojo classes, which support standard Object Oriented concepts within Dojo. JavaScript uses prototype-based inheritance, not class-based inheritance (which is used by most programming languages). Dojo provides the ability to simulate class-based inheritance using declare.
@@ -490,5 +425,60 @@ require(["my/Person"], function(Person){
   console.log(anon.residence, alice.residence); // "Universe A", "Universe 1"
   alice.moveTo("Universe 420");
   console.log(alice.residence); // "Universe 420"
+});
+```
+
+[`dojo/Stateful`](http://dojotoolkit.org/reference-guide/1.9/dojo/Stateful.html)
+---
+Base class for objects that provide named properties with optional getter/setter control and the ability to watch for property changes.
+```javascript
+require(["dojo/Stateful", "dojo/_base/declare"], function(Stateful, declare){
+  // Subclass dojo/Stateful:
+  var MyClass = declare([Stateful], {
+    foo: null,
+    _fooGetter: function(){
+      return this.foo;
+    },
+    _fooSetter: function(value){
+      this.foo = value;
+    }
+  });
+
+  // Create an instance and set some initial property values:
+  myObj = new MyClass({
+    foo: "baz"
+  });
+
+  // Watch changes on a property:
+  myObj.watch("foo", function(name, oldValue, value){
+    // Do something based on the change
+  });
+
+  // Get the value of a property:
+  myObj.get("foo");
+
+  // Set the value of a property:
+  myObj.set("foo", "bar");
+});
+```
+
+[`dojo/Evented`](http://dojotoolkit.org/reference-guide/1.9/dojo/Evented.html)
+---
+dojo/Evented is a module that provides a class that can be used as a base class or mixin for JavaScript classes that emit their own events. dojo/Evented is designed to provide a class that allows a developer to emit events and provide an easy way to allow those events to be connected to by downstream users. It leverages the API concepts of :ref:dojo/on <dojo/on>. It should be noted though that this is for what is commonly referred to as “sythetic” events, which are different than DOM events, which dojo/on normalises.
+```javascript
+define(["dojo/Evented", "dojo/_base/declare"], function(Evented, declare){
+  var MyComponent = declare([Evented], {
+    startup: function(){
+      // once we are done with startup, fire the "ready" event
+      this.emit("ready", {});
+    }
+  });
+
+  component = new MyComponent();
+  component.on("ready", function(){
+    // this will be called when the "ready" event is emitted
+    // ...
+  });
+  component.startup();
 });
 ```
