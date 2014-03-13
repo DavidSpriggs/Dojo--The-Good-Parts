@@ -111,7 +111,7 @@ require(["dojo/_base/lang"], function(lang){
 });
 ```
 
-[`dojo/Defered`](http://dojotoolkit.org/reference-guide/1.9/dojo/Deferred.html)
+[`dojo/Deferred`](http://dojotoolkit.org/reference-guide/1.9/dojo/Deferred.html)
 --------------
 Manages the communication between asynchronous threads (callbacks). The deferred is the private interface that should not be returned to calling code. That's what the promise is for. See `dojo/promise/Promise`.
 
