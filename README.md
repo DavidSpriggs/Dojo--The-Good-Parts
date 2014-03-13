@@ -482,3 +482,8 @@ define(["dojo/Evented", "dojo/_base/declare"], function(Evented, declare){
   component.startup();
 });
 ```
+
+To get started:
+---
+* [Application Controller Architecture](http://dojotoolkit.org/documentation/tutorials/1.9/recipes/app_controller/)
+* [Templeted Widgets](http://dojotoolkit.org/documentation/tutorials/1.9/templated/)
